@@ -4,7 +4,7 @@ close all
 
 
 % set figure
-len=5.3; %cm
+len=5.4; %cm
 width=7; %cm
 
 newfig=figure('NumberTitle', 'off', 'Name', 'Fit');
@@ -18,7 +18,6 @@ linewidth_curve=1.25;
 fontsize=12;
 FontName='Arial';
 Multiplyer3Layer=6;
-%Multiplyer6Layer=2;
 
 [r,g,b]=Analyze_Support.Get_Gold();
 
@@ -26,8 +25,6 @@ Multiplyer3Layer=6;
 % plot a
 Xnum=4; %axis in X
 Ynum=3; %axis in Y
-% spaceX=(width-Xnum*X_size)/(Xnum+1);
-% spaceY=(len-Ynum*Y_size)/(Ynum+1);
 spaceX=0.03;
 spaceY=0.03;
 X_size=width/Xnum-spaceX-0.2;
@@ -59,7 +56,27 @@ for i=1:Ynum
         hold(figs(i,j),'all');
     end
 end
-
+for i=1:Xnum
+    pos=posfig(3,i)
+    posfig(5,i)={[pos{1}(1)+0.7*pos{1}(3) pos{1}(2)+pos{1}(4)+0.03 X_size*0.3 Y_size*0.05]};
+    figs(5,i)=axes('Parent',newfig,...
+        'ZColor',fontcolor,'YColor',fontcolor,'XColor',fontcolor,...
+        'LineWidth',linewidth,...
+        'FontSize',fontsize,...
+        'FontName',FontName,...
+        'Color','none',...
+        'Units','in',...
+        'xticklabel',{''},...
+        'xtick',[],...
+        'XColor','none',...
+        'colormap',[r g b],...
+        'yticklabel',{''},...
+        'ytick',[],...
+        'YColor','none',...
+        'Position',posfig{5,i});
+    box(figs(5,i),'off');    
+    hold(figs(5,i),'all');
+end
 
 
 %% Text
@@ -78,7 +95,7 @@ CrossSectionMultiplyer3=text(figs(1,1),mar*1.5,mar*5,strcat('X',num2str(Multiply
 Data_txt=text(figs(3,1),-mar,0,'Data','Units','in','Rotation',90,'Color',[0 0 0],'FontSize',11,'FontName',FontName);
 Model_Fit_txt=text(figs(2,1),-mar,0,'Model','Units','in','Rotation',90,'Color',[0 0 0],'FontSize',11,'FontName',FontName);
 Cross_Section=text(figs(1,1),-mar,0,'Cross Section','Units','in','Rotation',90,'Color',[0 0 0],'FontSize',11,'FontName',FontName);
-CrossSectionYaxis=text(figs(1,4),X_size+mar*3.5,0.75*mar,'{B_{ac}}(x,y)/{x_{ac}} (T/m)','Units','in','Rotation',90,'Color',[0 0 0],'FontSize',12,'FontName',FontName);
+CrossSectionYaxis=text(figs(1,4),X_size+mar*2.5,1.625*mar,'{B^{ac}_z}(h,x)/{x_{ac}} (T/m)','Units','in','Rotation',90,'Color',[0 0 0],'FontSize',10,'FontName',FontName);
 
 
 % letters
@@ -191,36 +208,29 @@ CrossSectionModel14Layers=CrossSectionModel14Layers-mean(CrossSectionModel14Laye
 ModelColor='#eeb429';
 DataColor='#67290f';
 % 14 Layers
-
 Size=size(Data14layers,1);
 axes(figs(3,4))
 set(gca,'XColor','none','YColor','none')
 box(figs(3,4),'off')
 
-% surf(figs(3,4),rot90(Data14layers,3))
-% axis(figs(3,4),[1 Size 1 Size])
-% axis([1 Size 1 Size min(Model14Layers(:)) max(Data14layers(:)) min(Model14Layers(:)) max(Data14layers(:))])
-% shading interp
-
-%DeltaXaxis14=text(figs(3,4),mar*3,Y_size-mar*1,strcat(num2str(round(Delta14Layers,2)),'(G/{\mum})'),'Units','in','Color',[0 0 0],'FontSize',12,'FontName',FontName);
+surf(figs(3,4),rot90(Data14layers,3))
+axis([1 Size 1 Size min(Model14Layers(:)) max(Data14layers(:)) min(Model14Layers(:)) max(Data14layers(:))])
+shading interp
+Delta14Layers=(max(Data14layers(:))-min(Model14Layers(:)))*100;
+DeltaXaxis14=text(figs(5,4),0.15*X_size,Y_size*0.05+mar*1,strcat(num2str(round(Delta14Layers)),'(T/m)'),'Units','in','Color',[0 0 0],'FontSize',10,'FontName',FontName,'HorizontalAlignment','center');
 
 axes(figs(2,4))
 set(gca,'XColor','none','YColor','none')
 box('off')
-% surf(rot90(Model14Layers,3))
-% axis([1 Size 1 Size])
-% %axis([1 Size 1 Size min(Model14Layers(:)) max(Data14layers(:)) min(Model14Layers(:)) max(Data14layers(:))])
-% shading interp
+surf(rot90(Model14Layers,3))
+axis([1 Size 1 Size min(Model14Layers(:)) max(Data14layers(:)) min(Model14Layers(:)) max(Data14layers(:))])
+shading interp
 
 axes(figs(1,4))
-% plot(X14Layers(1,:)-0.15*(X14Layers(1,2)-X14Layers(1,1)),CrossSection14Layers,'Color',"#662506",'LineWidth',linewidth_curve)
-% hold on
-% plot(X14Layers(1,:),CrossSectionModel14Layers,'Color',[0.9290 0.6940 0.1250],'LineWidth',linewidth_curve)
 plot(X14Layers(1,:)-0.15*(X14Layers(1,2)-X14Layers(1,1)),CrossSection14Layers,'Color',DataColor,'LineWidth',linewidth_curve)
 hold on
 plot(X14Layers(1,:),CrossSectionModel14Layers,'Color',ModelColor,'LineWidth',linewidth_curve)
-axis([X14Layers1(1,1) X14Layers1(1,end) min(Model14Layers(:)),max(Model14Layers(:))+(max(Model14Layers(:))/10)])
-%axis([X14Layers(1,1) X14Layers(1,end) min(Model14Layers(:)),max(Model14Layers(:))+(max(Model14Layers(:))/10)])
+axis([1 Size 1 Size min(Model14Layers(:)) max(Data14layers(:)) min(Model14Layers(:)) max(Data14layers(:))])
 xticks([-1 0 1])
 xticklabels({'-1','0','1'})
 xlim([min(X6Layers1(:)) max(X6Layers1(:))])
@@ -238,28 +248,22 @@ Size=size(Data7layers,1);
 axes(figs(3,3))
 set(gca,'XColor','none','YColor','none')
 box(figs(3,3),'off')
-% surf(figs(3,3),rot90(Data7layers,3))
-% axis(figs(3,3),[1 Size 1 Size])
-% %axis([1 Size 1 Size min(Model7Layers(:)) max(Model7Layers(:)) min(Model7Layers(:)) max(Model7Layers(:))])
-% %axis([1 Size 1 Size min(Model14Layers(:)) max(Data14layers(:)) min(Model14Layers(:)) max(Data14layers(:))])
-% %DeltaXaxis7=text(figs(3,3),mar*3,Y_size-mar*1,strcat(num2str(round(Delta7Layers,2)),'(G/{\mum})'),'Units','in','Color',[0 0 0],'FontSize',12,'FontName',FontName);
-% 
-% shading interp
+surf(figs(3,3),rot90(Data7layers,3))
+axis([1 Size 1 Size min(Model7Layers(:)) max(Data7layers(:)) min(Model7Layers(:)) max(Data7layers(:))])
+Delta7Layers=(max(Data7layers(:))-min(Model7Layers(:)))*100;
+DeltaXaxis7=text(figs(5,3),0.15*X_size,Y_size*0.05+mar*1,strcat(num2str(round(Delta7Layers)),'(T/m)'),'Units','in','Color',[0 0 0],'FontSize',10,'FontName',FontName,'HorizontalAlignment','center');
+
+shading interp
 
 axes(figs(2,3))
 set(gca,'XColor','none','YColor','none')
 box('off')
-% surf(rot90(Model7Layers,3))
-% axis([1 Size 1 Size])
-% %axis([1 Size 1 Size min(Model7Layers(:)) max(Model7Layers(:)) min(Model7Layers(:)) max(Model7Layers(:))])
-% %axis([1 Size 1 Size min(Model14Layers(:)) max(Data14layers(:)) min(Model14Layers(:)) max(Data14layers(:))])
-% 
-% shading interp
+surf(rot90(Model7Layers,3))
+axis([1 Size 1 Size min(Model7Layers(:)) max(Data7layers(:)) min(Model7Layers(:)) max(Data7layers(:))])
+
+shading interp
 
 axes(figs(1,3))
-% plot(X7Layers(1,:)-0.3*(X7Layers(1,2)-X7Layers(1,1)),CrossSection7Layers,'Color',"#662506",'LineWidth',linewidth_curve)
-% hold on
-% plot(X7Layers(1,:),CrossSectionModel7Layers,'Color',[0.9290 0.6940 0.1250],'LineWidth',linewidth_curve)
 plot(X7Layers(1,:)-0.3*(X7Layers(1,2)-X7Layers(1,1)),CrossSection7Layers,'Color',DataColor,'LineWidth',linewidth_curve)
 hold on
 plot(X7Layers(1,:),CrossSectionModel7Layers,'Color',ModelColor,'LineWidth',linewidth_curve)
@@ -275,31 +279,20 @@ Size=size(Data6layers,1);
 axes(figs(3,2))
 set(gca,'XColor','none','YColor','none')
 box(figs(3,2),'off')
-% surf(figs(3,2),rot90(Data6layers,3))
-% %surf(figs(3,2),Data6layers*Multiplyer6Layer)
-% axis(figs(3,2),[1 Size 1 Size])
-% %axis([1 Size 1 Size min(Data6layers(:)) max(Model6Layers(:)) min(Data6layers(:)) max(Model6Layers(:))])
-% %axis([1 Size 1 Size min(Model14Layers(:)) max(Data14layers(:)) min(Model14Layers(:)) max(Data14layers(:))])
-% 
-% shading interp
-%DeltaXaxis6=text(figs(3,2),mar*3,Y_size-mar*1,strcat(num2str(round(Delta6Layers,2)),'(G/{\mum})'),'Units','in','Color',[0 0 0],'FontSize',12,'FontName',FontName);
+surf(figs(3,2),rot90(Data6layers,3))
+axis([1 Size 1 Size min(Data6layers(:)) max(Model6Layers(:)) min(Data6layers(:)) max(Model6Layers(:))])
+shading interp
+Delta6Layers=(max(Model6Layers(:))-min(Data6layers(:)))*100;
+DeltaXaxis6=text(figs(5,2),0.15*X_size,Y_size*0.05+mar*1,strcat(num2str(round(Delta6Layers)),'(T/m)'),'Units','in','Color',[0 0 0],'FontSize',10,'FontName',FontName,'HorizontalAlignment','center');
 
 axes(figs(2,2))
 set(gca,'XColor','none','YColor','none')
 box('off')
-% surf(rot90(Model6Layers,3))
-% %surf(Model6Layers*Multiplyer6Layer)
-% axis([1 Size 1 Size])
-% 
-% %axis([1 Size 1 Size min(Model6Layers(:)) max(Model6Layers(:)) min(Model6Layers(:)) max(Model6Layers(:))])
-% %axis([1 Size 1 Size min(Model14Layers(:)) max(Data14layers(:)) min(Model14Layers(:)) max(Data14layers(:))])
-% 
-% shading interp
+surf(rot90(Model6Layers,3))
+axis([1 Size 1 Size min(Data6layers(:)) max(Model6Layers(:)) min(Data6layers(:)) max(Model6Layers(:))])
+shading interp
 
 axes(figs(1,2))
-% plot(X6Layers(1,:)-0.25*(X6Layers(1,2)-X6Layers(1,1)),CrossSection6Layers+0.01,'Color',"#662506",'LineWidth',linewidth_curve)
-% hold on
-% plot(X6Layers(1,:),CrossSectionModel6Layers,'Color',[0.9290 0.6940 0.1250],'LineWidth',linewidth_curve)
 plot(X6Layers(1,:)-0.25*(X6Layers(1,2)-X6Layers(1,1)),CrossSection6Layers+0.01,'Color',DataColor,'LineWidth',linewidth_curve)
 hold on
 plot(X6Layers(1,:),CrossSectionModel6Layers,'Color',ModelColor,'LineWidth',linewidth_curve)
@@ -316,32 +309,23 @@ Size=size(Data3layers,1);
 axes(figs(3,1))
 set(gca,'XColor','none','YColor','none')
 box(figs(3,1),'off')
-% surf(figs(3,1),rot90(Data3layers,3))
-% %surf(figs(3,1),rot90(Data3layers*Multiplyer3Layer,3))
-% axis(figs(3,1),[1 Size 1 Size])
-% 
-% %axis([1 Size 1 Size min(Model14Layers(:)) max(Data14layers(:)) min(Model14Layers(:)) max(Data14layers(:))])
-% 
-% %axis([1 Size 1 Size min(Data3layers(:)) max(Model3Layers(:)) min(Data3layers(:)) max(Model3Layers(:))])
-% shading interp
-%DeltaXaxis3=text(figs(3,1),mar*3,Y_size-mar*1,strcat(num2str(round(Delta3Layers,2)),'(G/{\mum})'),'Units','in','Color',[0 0 0],'FontSize',12,'FontName',FontName);
+surf(figs(3,1),rot90(Data3layers,3))
+axis([1 Size 1 Size min(Data3layers(:)) max(Model3Layers(:)) min(Data3layers(:)) max(Model3Layers(:))])
+shading interp
+Delta3Layers=(max(Model3Layers(:))-min(Data3layers(:)))*100;
+DeltaXaxis3=text(figs(5,1),0.15*X_size,Y_size*0.05+mar*1,strcat(num2str(round(Delta3Layers)),'(T/m)'),'Units','in','Color',[0 0 0],'FontSize',10,'FontName',FontName,'HorizontalAlignment','center');
 
 axes(figs(2,1))
 set(gca,'XColor','none','YColor','none')
 box('off')
-% surf(rot90(Model3Layers,3))
-% %surf(Model3Layers*Multiplyer3Layer)
-% axis([1 Size 1 Size])
-% %axis([1 Size 1 Size min(Model14Layers(:)) max(Data14layers(:)) min(Model14Layers(:)) max(Data14layers(:))])
-% 
-% %axis([1 Size 1 Size min(Model3Layers(:)) max(Model3Layers(:)) min(Model3Layers(:)) max(Model3Layers(:))])
-% shading interp
+surf(rot90(Model3Layers,3))
+axis([1 Size 1 Size min(Data3layers(:)) max(Model3Layers(:)) min(Data3layers(:)) max(Model3Layers(:))])
+shading interp
 PearlColors=["#2b2bdf" "#ff3f21"]
 
 axes(figs(1,1))
 plot(X3Layers(1,:)-0.75*(X3Layers(1,2)-X3Layers(1,1)),CrossSection3Layers*Multiplyer3Layer,'Color',DataColor,'LineWidth',linewidth_curve)
 hold on
-%[0.9290 0.6940 0.1250]
 plot(X3Layers(1,:),CrossSectionModel94Layers(3:end-2)*Multiplyer3Layer-CrossSectionModel94Layers(1)+0.01,'Color',PearlColors(1),'LineWidth',0.9)
 plot(X3Layers(1,:),CrossSectionModel128Layers(3:end-2)*Multiplyer3Layer-CrossSectionModel128Layers(3)+0.01,'Color',PearlColors(2),'LineWidth',0.9)
 plot(X3Layers(1,:),CrossSectionModel3Layers*Multiplyer3Layer,'Color',ModelColor,'LineWidth',linewidth_curve)
@@ -349,38 +333,63 @@ axis([X3Layers1(1,1) X3Layers1(1,end) min(Model14Layers(:)),max(Model14Layers(:)
 xticks([-1 0 1])
 xticklabels({'-1','0','1'})
 xlim([min(X3Layers1(:)) max(X3Layers1(:))])
-Model=text(figs(1,1),X_size-3.3*mar,Y_size-2.5*mar,'Model','Units','in','Color',ModelColor,'FontSize',10,'FontName',FontName);
+Model=text(figs(1,1),X_size-3.3*mar,Y_size-2*mar,'Model','Units','in','Color',ModelColor,'FontSize',10,'FontName',FontName);
 Data=text(figs(1,1),X_size-2.7*mar,Y_size-mar,'Data','Units','in','Color',DataColor,'FontSize',10,'FontName',FontName);
-Model94=text(figs(1,1),X_size-5.6*mar,Y_size-4*mar,'{\Lambda}=  94 {\mum}','Units','in','Color',PearlColors(1),'FontSize',10,'FontName',FontName);
-Model128=text(figs(1,1),X_size-5.6*mar,Y_size-5.5*mar,'{\Lambda}=128 {\mum}','Units','in','Color',PearlColors(2),'FontSize',10,'FontName',FontName);
+Model94=text(figs(1,1),X_size-5.6*mar,Y_size-3*mar,'{\Lambda}=  94 {\mum}','Units','in','Color',PearlColors(1),'FontSize',10,'FontName',FontName);
+Model128=text(figs(1,1),X_size-5.6*mar,Y_size-4*mar,'{\Lambda}=128 {\mum}','Units','in','Color',PearlColors(2),'FontSize',10,'FontName',FontName);
 
 hold off
+
+axes(figs(5,1))
+box(figs(5,1),'on')
+colorbar=[0 10;0 10];
+surf(figs(5,1),-colorbar)
+view(2)
+shading interp
+
+axes(figs(5,2))
+box(figs(5,2),'on')
+surf(figs(5,2),-colorbar)
+view(2)
+shading interp
+
+axes(figs(5,3))
+box(figs(5,3),'on')
+surf(figs(5,3),-colorbar)
+view(2)
+shading interp
+
+axes(figs(5,4))
+box(figs(5,4),'on')
+surf(figs(5,4),-colorbar)
+view(2)
+shading interp
 %% Scales
-% ScaleLength=0.5; %in um
-% marg=0.1;
-% W=0.04; %width of scale bar in inch
-% 
-% % 3 Layers
-% figPos=posfig{2,2};
-% pixelsize=X3Layers1(1,2)-X3Layers1(1,1);
-% ScaleLengthPx=ScaleLength/pixelsize;
-% ScaleLengthIn=ScaleLengthPx*(X_size/size(X3Layers1,1));
-% ScalePosition=[figPos(1)+marg figPos(2)+marg ScaleLengthIn W];
-% hThin = annotation('rectangle','Units','inches',...
-%     'Position',ScalePosition,...
-%     'color','none','FaceColor',[0.9290 0.6940 0.1250]);
-% 
-% textScaleBar=text(figs(2,2),0.05,0+2*mar,'500 nm','Units','in','Color',[0.9290 0.6940 0.1250],'FontSize',10,'FontName',FontName);
+ScaleLength=0.5; %in um
+marg=0.1;
+W=0.04; %width of scale bar in inch
+
+% 3 Layers
+figPos=posfig{2,2};
+pixelsize=X3Layers1(1,2)-X3Layers1(1,1);
+ScaleLengthPx=ScaleLength/pixelsize;
+ScaleLengthIn=ScaleLengthPx*(X_size/size(X3Layers1,1));
+ScalePosition=[figPos(1)+marg figPos(2)+marg ScaleLengthIn W];
+hThin = annotation('rectangle','Units','inches',...
+    'Position',ScalePosition,...
+    'color','none','FaceColor',[0.9290 0.6940 0.1250]);
+
+textScaleBar=text(figs(2,2),0.05,0+2*mar,'500 nm','Units','in','Color',[0.9290 0.6940 0.1250],'FontSize',10,'FontName',FontName);
 
 
 %% XY Arrows
 
-% ArrowPosition=posfig{2,1};
-% ArrowSize=0.3;
-% 
-% Arrowx=annotation("arrow",'Units','inches',...
-%     'Position',[ArrowPosition(1)+marg ArrowPosition(2)+marg ArrowSize 0],...
-%     'color','w');
-% Arrowy=annotation("arrow",'Units','inches',...
-%     'Position',[ArrowPosition(1)+marg ArrowPosition(2)+marg 0 ArrowSize],...
-%     'color','w');
+ArrowPosition=posfig{2,1};
+ArrowSize=0.3;
+
+Arrowx=annotation("arrow",'Units','inches',...
+    'Position',[ArrowPosition(1)+marg ArrowPosition(2)+marg ArrowSize 0],...
+    'color','w');
+Arrowy=annotation("arrow",'Units','inches',...
+    'Position',[ArrowPosition(1)+marg ArrowPosition(2)+marg 0 ArrowSize],...
+    'color','w');
