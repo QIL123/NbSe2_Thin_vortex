@@ -224,21 +224,21 @@ marg=0.1;
 W=0.04; %width of scale bar in inch
 
 %  Layers
-% figPos=posfig{1,1};
-% ScaleLengthPx=ScaleLength/pixsize;
-% ScaleLengthIn=ScaleLengthPx*(X_size/size(X,1));
-% ScalePosition=[figPos(1)+marg*2.5 figPos(2)+marg ScaleLengthIn W];
-% hThin = annotation('rectangle','Units','inches',...
-%     'Position',ScalePosition,...
-%     'color','none','FaceColor',"w");
+figPos=posfig{1,1};
+ScaleLengthPx=ScaleLength/pixsize;
+ScaleLengthIn=ScaleLengthPx*(X_size/size(X,1));
+ScalePosition=[figPos(1)+marg*2.5 figPos(2)+marg ScaleLengthIn W];
+hThin = annotation('rectangle','Units','inches',...
+    'Position',ScalePosition,...
+    'color','none','FaceColor',"w");
 
 % textScaleBar=annotation("textbox",'Position',[0.05 0.25 0 0],'String','0.5({\mum})')
 % textScaleBar.FontSize=fontsize;
 mar=0.13;
-% c=text(figs(1,1),mar,Y_size-mar,'a','Units','in','Color',"w",'FontSize',12,'FontName',FontName);
-% e=text(figs(1,2),mar,Y_size-mar,'b','Units','in','Color',"w",'FontSize',12,'FontName',FontName);
-%textScaleBar=text(figs(1,1),mar,2*mar,'0.5({\mum})','Units','in','Color',"w",'FontSize',8,'FontName',FontName);
-% textScolormap1=text(figs(1,1),X_size-mar*3,Y_size+mar*1.5,strcat(num2str(round(DeltaMDC,1)*100),' {\mu}T'),'Units','in','Color','k','FontSize',8,'FontName',FontName);
-% textScolormap2=text(figs(1,2),X_size-mar*3.3,Y_size+mar*1.5,strcat(num2str(round(DeltaMTF,1)*100),' T/m'),'Units','in','Color','k','FontSize',8,'FontName',FontName);
-% 
+c=text(figs(1,1),mar,Y_size-mar,'a','Units','in','Color',"w",'FontSize',12,'FontName',FontName);
+e=text(figs(1,2),mar,Y_size-mar,'b','Units','in','Color',"w",'FontSize',12,'FontName',FontName);
+textScaleBar=text(figs(1,1),1.5*mar,1.75*mar,'500 nm','Units','in','Color',"w",'FontSize',10,'FontName',FontName);
+textScolormap1=text(figs(1,1),X_size-mar*3,Y_size+mar*1.5,strcat(num2str(round(DeltaMDC,1)*100),' {\mu}T'),'Units','in','Color','k','FontSize',8,'FontName',FontName);
+textScolormap2=text(figs(1,2),X_size-mar*3.3,Y_size+mar*1.5,strcat(num2str(round(DeltaMTF,1)*100),' T/m'),'Units','in','Color','k','FontSize',8,'FontName',FontName);
+
 

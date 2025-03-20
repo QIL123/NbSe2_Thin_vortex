@@ -66,7 +66,7 @@ hold(figs(1,2),'all');
 
 
 %% loading plot data
-
+addpath(genpath('TF_fitting_functions'))
 Lambda=0.22;
 z=0.26;
 phi_0=20.7;
@@ -99,16 +99,16 @@ BzPearlDerivative=diff(BzPearl(:,1:end-1))/pixsize;
 
 [BzAbrikosov,ConvBzAbrikosov] = Abrikosov_Gen(X,Y,Lambda,z,Kernel,phi_0,imagesize);
 
-BzAbrikosov=(BzAbrikosov-min(BzAbrikosov(:)))*100;%change to umT
+% BzAbrikosov=(BzAbrikosov-min(BzAbrikosov(:)))*100;%change to umT
 
-AbrikosovDerivative=diff(BzAbrikosov(:,1:end-1))/pixsize;
+% AbrikosovDerivative=diff(BzAbrikosov(:,1:end-1))/pixsize;
 
-% PearlLength100=100;
-% [BzPearl100,ConvBzPearl100] = pearlgen_no_mag(X,Y,xc,yc,PearlLength100,z,phi_0,Kernel);
-% 
-% BzPearl100=(BzPearl100-min(BzPearl100(:,bb)))*100;%change to umT
-% 
-% BzPearl100Derivative=diff(BzPearl100(:,1:end-1))/pixsize;
+PearlLength100=100;
+[BzPearl100,ConvBzPearl100] = pearlgen_no_mag(X,Y,xc,yc,PearlLength100,z,phi_0,Kernel);
+
+BzPearl100=(BzPearl100-min(BzPearl100(:,bb)))*100;%change to umT
+
+BzPearl100Derivative=diff(BzPearl100(:,1:end-1))/pixsize;
 
 %% Plots
 figure(newfig)
@@ -121,13 +121,13 @@ yticks([0 300 600])
 yticklabels({'0','300','600'})
 ylim([0 650])
 
-plot(X(1,:),BzAbrikosov(:,bb),'color',abrikosovcolor,'LineWidth',linewidth_curve)
+% plot(X(1,:),BzAbrikosov(:,bb),'color',abrikosovcolor,'LineWidth',linewidth_curve)
 
 hold on
 
 plot(X(1,:),BzPearl(:,bb),'color',pearl1color,'LineWidth',linewidth_curve)
 
-%plot(X(1,:),BzPearl100(:,bb)*20,'color',pearl100color,'LineWidth',linewidth_curve)
+plot(X(1,:),BzPearl100(:,bb)*20,'color',pearl100color,'LineWidth',linewidth_curve)
 
 hold off
 
@@ -140,7 +140,7 @@ yticklabels({'-1000','0','1000'})
 ylim([-1300 1300])
 
 
-plot(X(1,1:end-1),AbrikosovDerivative(:,bb),'color',abrikosovcolor,'LineWidth',linewidth_curve)
+% plot(X(1,1:end-1),AbrikosovDerivative(:,bb),'color',abrikosovcolor,'LineWidth',linewidth_curve)
 
 hold on
 
@@ -149,7 +149,7 @@ plot(X(1,1:end-1),BzPearlDerivative(:,bb),'color',pearl1color,'LineWidth',linewi
 
 
 
-%plot(X(1,1:end-1),BzPearl100Derivative(:,bb)*20,'color',pearl100color,'LineWidth',linewidth_curve)
+plot(X(1,1:end-1),BzPearl100Derivative(:,bb)*20,'color',pearl100color,'LineWidth',linewidth_curve)
 
 mar=0.13
 d=text(figs(1,1),mar,Y_size-mar,'d','Units','in','Color','k','FontSize',10,'FontName',FontName);
@@ -157,9 +157,9 @@ f=text(figs(1,2),mar,Y_size-mar,'f','Units','in','Color','k','FontSize',10,'Font
 %LambdaL=text(figs(1,2),X_size-6*mar,Y_size-mar,'{\phi}:{\lambda}_L 220(nm)','Units','in','Color',abrikosovcolor,'FontSize',8,'FontName',FontName);
 % Pearl1=text(figs(1,2),X_size-6*mar,Y_size-2.5*mar,'{\phi}:{\wedge} 1.5({\mum})','Units','in','Color',pearl1color,'FontSize',8,'FontName',FontName);
 % Pearl100=text(figs(1,2),X_size-6*mar,Y_size-4*mar,'{\phi}:{\wedge} 100({\mum})','Units','in','Color',pearl100color,'FontSize',8,'FontName',FontName);
-LambdaL=text(figs(1,1),X_size-4*mar,Y_size-2.5*mar,'{\lambda}_L 220nm','Units','in','Color',abrikosovcolor,'FontSize',8,'FontName',FontName);
+% LambdaL=text(figs(1,1),X_size-4*mar,Y_size-2.5*mar,'{\lambda}_L 220nm','Units','in','Color',abrikosovcolor,'FontSize',8,'FontName',FontName);
 Pearl1=text(figs(1,1),X_size-4.2*mar,Y_size-mar,'{\Lambda} 1.5 {\mum}','Units','in','Color',pearl1color,'FontSize',8,'FontName',FontName);
-%Pearl100=text(figs(1,1),X_size-4.2*mar,Y_size-2.5*mar,'{\Lambda} 100 {\mum}','Units','in','Color',pearl100color,'FontSize',8,'FontName',FontName);
+Pearl100=text(figs(1,1),X_size-4.2*mar,Y_size-2.5*mar,'{\Lambda} 100 {\mum}','Units','in','Color',pearl100color,'FontSize',8,'FontName',FontName);
 Ylabel2=text(figs(1,2),X_size+2.5*mar,3.4*mar,'B^{ac}_z(h,x)/x_{ac} (T/m)','Units','in','Rotation',90,'Color','k','FontSize',10,'FontName',FontName);
 Ylabel1=text(figs(1,1),-3*mar,4.5*mar,'{B_z}(h,x) ({\mu}T)','Units','in','Rotation',90,'Color','k','FontSize',10,'FontName',FontName);
 Xlabel2=text(figs(1,2),5*mar,-2*mar,'x ({\mum})','Units','in','Color','k','FontSize',10,'FontName',FontName);
